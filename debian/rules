@@ -18,17 +18,20 @@ override_dh_auto_clean:
 override_dh_auto_configure:
 	cp Make.vars.ubuntu.8.10 Make.vars
 
-override_dh_fixperms:
+override_dh_auto_install:
 	{ echo '#!/bin/sh'; cat bin/unix/config.sh; } > /tmp/out \
 	 && mv /tmp/out bin/unix/config.sh
+
+	{ echo '#!/bin/sh'; cat bin/unix/FixEnvironment.sh; } > /tmp/out \
+	 && mv /tmp/out bin/unix/FixEnvironment.sh
+
 	{ echo '#!/bin/sh'; cat bin/unix/config.sh.Example; } > /tmp/out \
 	 && mv /tmp/out bin/unix/config.sh.Example
+
 	{ echo '#!/bin/sh'; cat bin/unix/KmStop.sh; } > /tmp/out \
 	 && mv /tmp/out bin/unix/KmStop.sh
 	{ echo '#!/bin/sh'; cat bin/unix/JythonPrompt.sh; } > /tmp/out \
 	 && mv /tmp/out bin/unix/JythonPrompt.sh
-	{ echo '#!/bin/sh'; cat bin/unix/config.sh; } > /tmp/out \
-	 && mv /tmp/out bin/unix/config.sh
 
 	{ echo '#!/usr/bin/python'; cat client/gui/script/viewSimTest.py; } > /tmp/out \
 	 && mv /tmp/out client/gui/script/viewSimTest.py
@@ -48,9 +51,6 @@ override_dh_fixperms:
 	 && mv /tmp/out bin/unix/OpenHRPpy
 	{ echo '#!/usr/bin/python'; cat client/gui/script/rbimporter.py; } > /tmp/out \
 	 && mv /tmp/out client/gui/script/rbimporter.py
-
-
-	dh_fixperms --builddirectory=. --
 
 	chmod 644 sample/JoystickControl/TkJoyStick/README.TkJoyStick
 	chmod 755 bin/unix/OpenHRPpy
@@ -76,7 +76,6 @@ override_dh_fixperms:
 	find -name '*.sh' | xargs chmod 755
 	find -name '*.py' | xargs chmod 755
 
-override_dh_auto_install:
 	find -iname thumbs.db | xargs rm -f
 
 	mkdir -p debian/openhrp3.0.5/opt/OpenHRP-3.0.5
