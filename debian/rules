@@ -1,0 +1,93 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+override_dh_auto_clean:
+	cp Make.vars.ubuntu.8.10 Make.vars
+	dh_auto_clean --
+	rm -f bin/unix/OpenHRPpy
+	rm -f client/gui/corba/OpenHRPCommonDynSK.cpp
+
+override_dh_auto_configure:
+	cp Make.vars.ubuntu.8.10 Make.vars
+
+override_dh_fixperms:
+	{ echo '#!/bin/sh'; cat bin/unix/config.sh; } > /tmp/out \
+	 && mv /tmp/out bin/unix/config.sh
+	{ echo '#!/bin/sh'; cat bin/unix/config.sh.Example; } > /tmp/out \
+	 && mv /tmp/out bin/unix/config.sh.Example
+	{ echo '#!/bin/sh'; cat bin/unix/KmStop.sh; } > /tmp/out \
+	 && mv /tmp/out bin/unix/KmStop.sh
+	{ echo '#!/bin/sh'; cat bin/unix/JythonPrompt.sh; } > /tmp/out \
+	 && mv /tmp/out bin/unix/JythonPrompt.sh
+	{ echo '#!/bin/sh'; cat bin/unix/config.sh; } > /tmp/out \
+	 && mv /tmp/out bin/unix/config.sh
+
+	{ echo '#!/usr/bin/python'; cat client/gui/script/viewSimTest.py; } > /tmp/out \
+	 && mv /tmp/out client/gui/script/viewSimTest.py
+	{ echo '#!/usr/bin/python'; cat client/gui/script/onlineviewerTest.py; } > /tmp/out \
+	 && mv /tmp/out client/gui/script/onlineviewerTest.py
+	{ echo '#!/usr/bin/python'; cat client/gui/script/kmstopTest.py; } > /tmp/out \
+	 && mv /tmp/out client/gui/script/kmstopTest.py
+	{ echo '#!/usr/bin/python'; cat client/gui/script/autoplay.py; } > /tmp/out \
+	 && mv /tmp/out client/gui/script/autoplay.py
+	{ echo '#!/usr/bin/python'; cat client/gui/script/simTest.py; } > /tmp/out \
+	 && mv /tmp/out client/gui/script/simTest.py
+	{ echo '#!/usr/bin/python'; cat client/gui/script/compile.py; } > /tmp/out \
+	 && mv /tmp/out client/gui/script/compile.py
+	{ echo '#!/usr/bin/python'; cat client/gui/script/swingTest.py; } > /tmp/out \
+	 && mv /tmp/out client/gui/script/swingTest.py
+	{ echo '#!/usr/bin/python'; cat bin/unix/OpenHRPpy; } > /tmp/out \
+	 && mv /tmp/out bin/unix/OpenHRPpy
+	{ echo '#!/usr/bin/python'; cat client/gui/script/rbimporter.py; } > /tmp/out \
+	 && mv /tmp/out client/gui/script/rbimporter.py
+
+
+	dh_fixperms --builddirectory=. --
+
+	chmod 644 sample/JoystickControl/TkJoyStick/README.TkJoyStick
+	chmod 755 bin/unix/OpenHRPpy
+	chmod 755 bin/unix/config.sh.Example
+
+	find -name '*.wrl' | xargs chmod 644
+	find -name '*.png' | xargs chmod 644
+
+	find -name '*.cpp' | xargs chmod 644
+	find -name '*.conf' | xargs chmod 644
+	find -name '*README*' | xargs chmod 644
+
+	find -name '*.bat' | xargs chmod 644
+	find -name '*.sln' | xargs chmod 644
+	find -name '*.properties' | xargs chmod 644
+	find -name '*.vcproj' | xargs chmod 644
+	find -name '*.dll' | xargs chmod 644
+	find -name '*.jar' | xargs chmod 644
+
+	find -name '.classpath' | xargs chmod 644
+	find -name '.project' | xargs chmod 644
+
+	find -name '*.sh' | xargs chmod 755
+	find -name '*.py' | xargs chmod 755
+
+override_dh_auto_install:
+	find -iname thumbs.db | xargs rm -f
+
+	mkdir -p debian/openhrp3.0.5/opt/OpenHRP-3.0.5
+	find . -mindepth 1 -maxdepth 1 \
+	-type d -and -not -name debian -and -not -name '.*' \
+	| xargs cp -prt debian/openhrp3.0.5/opt/OpenHRP-3.0.5
+
+	mkdir -p debian/openhrp3.0.5/usr/share/pixmaps
+	cp debian/openhrp.xpm debian/openhrp3.0.5/usr/share/pixmaps/
+	mkdir -p debian/openhrp3.0.5/usr/share/applications
+	cp debian/openhrp.desktop debian/openhrp3.0.5/usr/share/applications/
+
+%:
+	dh  $@

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=OpenHRP
+GenericName=OpenHRP robotics framework
+Exec=/opt/OpenHRP-3.0.5/bin/unix/GrxUI.sh
+Icon=openhrp
+Categories=Robotics;Science;Education;
