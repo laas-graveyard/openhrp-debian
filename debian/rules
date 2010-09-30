@@ -77,6 +77,7 @@ override_dh_auto_install:
 	find -name '*.py' | xargs chmod 755
 
 	find -iname thumbs.db | xargs rm -f
+	find -type d -empty -delete
 
 	mkdir -p debian/openhrp3.0.5/opt/OpenHRP-3.0.5
 	find . -mindepth 1 -maxdepth 1 \
