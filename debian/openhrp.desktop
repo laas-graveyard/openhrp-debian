@@ -2,7 +2,7 @@
 Type=Application
 Name=OpenHRP
 GenericName=OpenHRP robotics framework
-Exec=./GrxUI.sh
+Exec=/opt/OpenHRP-3.0.5/bin/unix/GrxUI.sh
 Path=/opt/OpenHRP-3.0.5/bin/unix
 Icon=openhrp
 Categories=Robotics;Science;Education;

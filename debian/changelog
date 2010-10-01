@@ -1,3 +1,11 @@
+openhrp3 (3.0.5-4) lucid; urgency=low
+
+  * Add java3d to dependencies.
+  * Fix desktop file.
+  * Fix config.sh file before installing it.
+
+ -- Thomas Moulard <thomas.moulard@gmail.com>  Fri, 1 Oct 2010 12:22:00 +0200
+
 openhrp3 (3.0.5-3) lucid; urgency=low
 
   * Add missing libgl1-mesa-glx dependency.
