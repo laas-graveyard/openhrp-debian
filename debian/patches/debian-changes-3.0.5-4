@@ -168,14 +168,14 @@ Last-Update: <YYYY-MM-DD>
 +#  1 - Debug mode with optimization
 +#  2 - Debug mode without optimization
 +DEBUG_VER = 0
---- openhrp3-3.0.5.orig/Make.rules
-+++ openhrp3-3.0.5/Make.rules
-@@ -11,7 +11,7 @@ CXX_FLAGS_COMMON	=	-c -Wall -fPIC -I$(CO
- OSNAME			=	$(shell uname -s)
+--- openhrp3-3.0.5.orig/bin/unix/Makefile
++++ openhrp3-3.0.5/bin/unix/Makefile
+@@ -13,7 +13,7 @@ OpenHRPpy:$(TOP)Make.rules $(TOP)Make.va
+ 	chmod a+x OpenHRPpy
  
- # Install
--OPENHRPHOME_DIR = $(shell cd $(TOP); pwd)
-+OPENHRPHOME_DIR =       /opt/OpenHRP-3.0.5
- INSTALL		=	install -c
- INSTALLDATA	=	$(INSTALL) -m 644
- 
+ config.sh:$(TOP)Make.rules $(TOP)Make.vars Makefile
+-	/bin/echo 'export OPENHRPHOME=$(OPENHRPHOME_DIR)'> config.sh
++	/bin/echo 'export OPENHRPHOME=/opt/OpenHRP-3.0.5'> config.sh
+ 	/bin/echo >> config.sh
+ 	/bin/echo 'export DYNAMICS_ENGINE=$(DYNAMICS_ENGINE)'>> config.sh
+ 	/bin/echo 'export JYTHON_HOME=$(JYTHON_HOME)'>> config.sh

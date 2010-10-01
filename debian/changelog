@@ -1,3 +1,9 @@
+openhrp3 (3.0.5-5) lucid; urgency=low
+
+  * Fix config.sh patch.
+
+ -- Thomas Moulard <thomas.moulard@gmail.com>  Fri, 1 Oct 2010 13:47:00 +0200
+
 openhrp3 (3.0.5-4) lucid; urgency=low
 
   * Add java3d to dependencies.
