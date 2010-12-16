@@ -30,3 +30,14 @@ etc/
 install.vcproj
 sample/
 util/
+
+
+
+Make.vars
+build-arch-stamp
+build-indep-stamp
+configure-stamp
+debian/files
+debian/openhrp3.0.1.debhelper.log
+debian/openhrp3.0.1.substvars
+debian/openhrp3.0.1/

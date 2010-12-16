@@ -1,38 +1,5 @@
-openhrp3 (3.0.5-6) lucid; urgency=low
+openhrp3.0.1 (3.0.1-1) unstable; urgency=low
 
-  * Fix patch again.
+  * Initial release.
 
- -- Thomas Moulard <thomas.moulard@gmail.com>  Fri, 1 Oct 2010 14:44:00 +0200
-
-openhrp3 (3.0.5-5) lucid; urgency=low
-
-  * Fix config.sh patch.
-
- -- Thomas Moulard <thomas.moulard@gmail.com>  Fri, 1 Oct 2010 13:47:00 +0200
-
-openhrp3 (3.0.5-4) lucid; urgency=low
-
-  * Add java3d to dependencies.
-  * Fix desktop file.
-  * Fix config.sh file before installing it.
-
- -- Thomas Moulard <thomas.moulard@gmail.com>  Fri, 1 Oct 2010 12:22:00 +0200
-
-openhrp3 (3.0.5-3) lucid; urgency=low
-
-  * Add missing libgl1-mesa-glx dependency.
-  * Switch to x86 only package (packaged Java3d includes precompiled binaries).
-
- -- Thomas Moulard <thomas.moulard@gmail.com>  Fri, 1 Oct 2010 11:31:00 +0200
-
-openhrp3 (3.0.5-2) lucid; urgency=low
-
-  * Add missing openrtm-aist dependency.
-
- -- Thomas Moulard <thomas.moulard@gmail.com>  Fri, 1 Oct 2010 01:44:00 +0200
-
-openhrp3 (3.0.5-1) lucid; urgency=low
-
-  * Initial work.
-
- -- Thomas Moulard <thomas.moulard@gmail.com>  Tue, 30 Sep 2010 18:33:00 +0200
+ -- Thomas Moulard <thomas.moulard@gmail.com>  Thu, 16 Dec 2010 14:13:20 +0100

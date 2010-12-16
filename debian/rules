@@ -1,93 +1,125 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
-# Sample debian/rules that uses debhelper.
-# This file was originally written by Joey Hess and Craig Small.
-# As a special exception, when this file is copied by dh-make into a
-# dh-make output file, you may use that output file without restriction.
-# This special exception was added by Craig Small in version 0.37 of dh-make.
 
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE=1
 
-override_dh_auto_clean:
-	cp Make.vars.ubuntu.8.10 Make.vars
-	dh_auto_clean --
-	rm -f bin/unix/OpenHRPpy
-	rm -f client/gui/corba/OpenHRPCommonDynSK.cpp
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
 
-override_dh_auto_configure:
-	cp Make.vars.ubuntu.8.10 Make.vars
 
-override_dh_auto_install:
-	{ echo '#!/bin/sh'; cat bin/unix/config.sh; } > /tmp/out \
-	 && mv /tmp/out bin/unix/config.sh
 
-	{ echo '#!/bin/sh'; cat bin/unix/FixEnvironment.sh; } > /tmp/out \
-	 && mv /tmp/out bin/unix/FixEnvironment.sh
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
 
-	{ echo '#!/bin/sh'; cat bin/unix/config.sh.Example; } > /tmp/out \
-	 && mv /tmp/out bin/unix/config.sh.Example
+# Package configuration.
+	cp $(CURDIR)/Make.vars.ubuntu.8.04 $(CURDIR)/Make.vars
 
-	{ echo '#!/bin/sh'; cat bin/unix/KmStop.sh; } > /tmp/out \
-	 && mv /tmp/out bin/unix/KmStop.sh
-	{ echo '#!/bin/sh'; cat bin/unix/JythonPrompt.sh; } > /tmp/out \
-	 && mv /tmp/out bin/unix/JythonPrompt.sh
+	touch configure-stamp
 
-	{ echo '#!/usr/bin/python'; cat client/gui/script/viewSimTest.py; } > /tmp/out \
-	 && mv /tmp/out client/gui/script/viewSimTest.py
-	{ echo '#!/usr/bin/python'; cat client/gui/script/onlineviewerTest.py; } > /tmp/out \
-	 && mv /tmp/out client/gui/script/onlineviewerTest.py
-	{ echo '#!/usr/bin/python'; cat client/gui/script/kmstopTest.py; } > /tmp/out \
-	 && mv /tmp/out client/gui/script/kmstopTest.py
-	{ echo '#!/usr/bin/python'; cat client/gui/script/autoplay.py; } > /tmp/out \
-	 && mv /tmp/out client/gui/script/autoplay.py
-	{ echo '#!/usr/bin/python'; cat client/gui/script/simTest.py; } > /tmp/out \
-	 && mv /tmp/out client/gui/script/simTest.py
-	{ echo '#!/usr/bin/python'; cat client/gui/script/compile.py; } > /tmp/out \
-	 && mv /tmp/out client/gui/script/compile.py
-	{ echo '#!/usr/bin/python'; cat client/gui/script/swingTest.py; } > /tmp/out \
-	 && mv /tmp/out client/gui/script/swingTest.py
-	{ echo '#!/usr/bin/python'; cat bin/unix/OpenHRPpy; } > /tmp/out \
-	 && mv /tmp/out bin/unix/OpenHRPpy
-	{ echo '#!/usr/bin/python'; cat client/gui/script/rbimporter.py; } > /tmp/out \
-	 && mv /tmp/out client/gui/script/rbimporter.py
 
-	chmod 644 sample/JoystickControl/TkJoyStick/README.TkJoyStick
-	chmod 755 bin/unix/OpenHRPpy
-	chmod 755 bin/unix/config.sh.Example
+#Architecture
+build: build-arch build-indep
 
-	find -name '*.wrl' | xargs chmod 644
-	find -name '*.png' | xargs chmod 644
+build-arch: build-arch-stamp
+build-arch-stamp: configure-stamp
+	LD_LIBRARY_PATH=$(CURDIR)/ModelLoader/server/java3d/j3d/lib/i386:$(CURDIR)/client/gui/jmf/lib:$(LD_LIBRARY_PATH) $(MAKE)
+	touch $@
 
-	find -name '*.cpp' | xargs chmod 644
-	find -name '*.conf' | xargs chmod 644
-	find -name '*README*' | xargs chmod 644
+build-indep: build-indep-stamp
+build-indep-stamp: configure-stamp
+	touch $@
 
-	find -name '*.bat' | xargs chmod 644
-	find -name '*.sln' | xargs chmod 644
-	find -name '*.properties' | xargs chmod 644
-	find -name '*.vcproj' | xargs chmod 644
-	find -name '*.dll' | xargs chmod 644
-	find -name '*.jar' | xargs chmod 644
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-arch-stamp build-indep-stamp configure-stamp
+# Clean package.
+	$(MAKE) clean
+	-rm $(CURDIR)/Make.vars
+	-rm -f $(CURDIR)/bin/unix/OpenHRPpy
+	-rm -f $(CURDIR)/client/gui/corba/OpenHRPCommonDynSK.cpp
+	dh_clean
 
-	find -name '.classpath' | xargs chmod 644
-	find -name '.project' | xargs chmod 644
+install: install-indep install-arch
+install-indep:
+	dh_testdir
+	dh_testroot
+	dh_clean -k -i
+	dh_installdirs -i
+	dh_install -i
 
-	find -name '*.sh' | xargs chmod 755
-	find -name '*.py' | xargs chmod 755
+install-arch:
+	dh_testdir
+	dh_testroot
+	dh_clean -k -s
+	dh_installdirs -s
 
-	find -iname thumbs.db | xargs rm -f
-	find -type d -empty -delete
+	chmod 644 $(CURDIR)/sample/JoystickControl/TkJoyStick/README.TkJoyStick
+	chmod 755 $(CURDIR)/bin/unix/OpenHRPpy
+	chmod 755 $(CURDIR)/bin/unix/config.sh.Example
 
-	mkdir -p debian/openhrp3.0.5/opt/OpenHRP-3.0.5
-	find . -mindepth 1 -maxdepth 1 \
+	find $(CURDIR) -name '*.wrl' | xargs chmod 644
+	find $(CURDIR) -name '*.png' | xargs chmod 644
+
+	find $(CURDIR) -name '*.cpp' | xargs chmod 644
+	find $(CURDIR) -name '*.conf' | xargs chmod 644
+	find $(CURDIR) -name '*README*' | xargs chmod 644
+
+	find $(CURDIR) -name '*.bat' | xargs chmod 644
+	find $(CURDIR) -name '*.sln' | xargs chmod 644
+	find $(CURDIR) -name '*.properties' | xargs chmod 644
+	find $(CURDIR) -name '*.vcproj' | xargs chmod 644
+	find $(CURDIR) -name '*.jar' | xargs chmod 644
+
+	find $(CURDIR) -name '*.sh' | xargs chmod 755
+	find $(CURDIR) -name '*.py' | xargs chmod 755
+
+	find $(CURDIR) -iname thumbs.db | xargs rm -f
+	find $(CURDIR) -type d -empty -delete
+
+	mkdir -p $(CURDIR)/debian/openhrp3.0.1/opt/openhrp-3.0.1
+	find $(CURDIR) -mindepth 1 -maxdepth 1 \
 	-type d -and -not -name debian -and -not -name '.*' \
-	| xargs cp -prt debian/openhrp3.0.5/opt/OpenHRP-3.0.5
+	| xargs cp -prt $(CURDIR)/debian/openhrp3.0.1/opt/openhrp-3.0.1
 
-	mkdir -p debian/openhrp3.0.5/usr/share/pixmaps
-	cp debian/openhrp.xpm debian/openhrp3.0.5/usr/share/pixmaps/
-	mkdir -p debian/openhrp3.0.5/usr/share/applications
-	cp debian/openhrp.desktop debian/openhrp3.0.5/usr/share/applications/
+	mkdir -p $(CURDIR)/debian/openhrp3.0.1/usr/share/pixmaps
+	cp $(CURDIR)/debian/openhrp.xpm \
+	   $(CURDIR)/debian/openhrp3.0.1/usr/share/pixmaps/
+	mkdir -p $(CURDIR)/debian/openhrp3.0.1/usr/share/applications
+	cp $(CURDIR)/debian/openhrp.desktop \
+	   $(CURDIR)/debian/openhrp3.0.1/usr/share/applications/
 
-%:
-	dh  $@
+	dh_install -s
+# Must not depend on anything. This is to be called by
+# binary-arch/binary-indep
+# in another 'make' thread.
+binary-common:
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdocs
+	dh_installexamples
+	dh_installmenu
+	dh_desktop
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_makeshlibs
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+# Build architecture independant packages using the common target.
+binary-indep: build-indep install-indep
+	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
+
+# Build architecture dependant packages using the common target.
+binary-arch: build-arch install-arch
+	$(MAKE) -f debian/rules DH_OPTIONS=-s binary-common
+
+binary: binary-arch binary-indep
+.PHONY: build clean binary-indep binary-arch binary install install-indep install-arch configure
